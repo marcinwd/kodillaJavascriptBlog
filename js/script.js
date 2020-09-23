@@ -67,8 +67,10 @@
     //module 7.2; module 7.3 when [NEW 7.3]
     //Creats tag links at the bottom of each article & taglist on the right [NEW 7.3]
     function generateTags(){
-        /*[NEW 7.3] create a new variable allTags with an empty array*/
-        let allTags = [];
+        /*[NEW 7.3] create a new variable allTags with an empty array
+        let allTags = [];*/
+        /*[NEW 7.3 object] create a new variable allTags with an empty object*/
+        let allTags = {};
         /* find all articles */
         const allArticles = document.querySelectorAll(otpArticleSelector);
         /* START LOOP: for every article: */
@@ -87,18 +89,37 @@
                 const tagLinkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
                 /* add generated code to html variable */
                 html = html + ' ' + tagLinkHTML;
-                /*[NEW 7.3] check if this link is NOT already in allTags*/
+                /*[NEW 7.3] check if this link is NOT already in allTags
                 if(allTags.indexOf(tagLinkHTML) == -1){
-                    /*[NEW 7.3] generate code to allTags array*/
+                    /*[NEW 7.3] generate code to allTags array
                     allTags.push(tagLinkHTML);
-                    console.log(allTags);
+                }*/
+                /*[NEW 7.3 object] check if this link is not already in allTags*/
+                if(!allTags[tag]){
+                    /*[NEW 7.3 object] add tag to allTags object*/
+                    allTags[tag] = 1;
+                } else {
+                    allTags[tag]++;
                 }
             /* END LOOP: for each tag */
             }
             /*[NEW 7.3] find list of tags in the right column*/
             const tagList = document.querySelector('.tags');
             /*[NEW 7.3] add html from allTags to tagList*/
-            tagList.innerHTML = allTags.join('');
+            //tagList.innerHTML = allTags.join(''); [NEW 7.3 object]
+            
+            /*[NEW 7.3 object] create variable for all links HTML code*/
+            let allTagsHTML = '';
+            /*[NEW 7.3 object] START LOOP for each tag in allTags*/
+            for(let tag in allTags){
+                /*[NEW 7.3 object] generate code of a link and ADD to allTagsHTML*/
+                allTagsHTML += tag + ' (' + allTags[tag] + ') ';
+                /*[NEW 7.3 object] END LOOP for each tag in allTags*/
+            }
+            /*[NEW 7.3 object]  ADD HTML from allTagsHTML to tagList*/
+            tagList.innerHTML = allTagsHTML;
+            console.log(allTags);
+
             /* insert HTML of all the links into the tags wrapper */
             tagsWrapper.innerHTML = html;
         /* END LOOP: for every article: */
