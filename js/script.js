@@ -5,8 +5,8 @@
         optTitleSelector = '.post-title',
         optTitleListSelector = '.titles',
         optArticleTagsSelector = '.post-tags .list',
-        optArticleAuthorSelector = '.post-author';
-        //optTagsListSelector = '.tags .list';
+        optArticleAuthorSelector = '.post-author',
+        optTagsListSelector = '.tags .list';
 
     //module 6. - OK
     //Switching throught articles, leftSidebar "ALL POSTS"
@@ -52,7 +52,7 @@
             /* create HTML of the link */
             const linkHTML = '<li><a href="#'+ articleId +'"><span>' + articleTitle + '</span></a></li>';
             /* create list of html links*/
-            html = html + linkHTML;
+            html += linkHTML;
         }
         /* insert link into titleList */
         titleList.innerHTML = html;
@@ -88,7 +88,7 @@
                 /* generate HTML of the link */
                 const tagLinkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
                 /* add generated code to html variable */
-                html = html + ' ' + tagLinkHTML;
+                html += ' ' + tagLinkHTML;
                 /*[NEW 7.3] check if this link is NOT already in allTags
                 if(allTags.indexOf(tagLinkHTML) == -1){
                     /*[NEW 7.3] generate code to allTags array
@@ -106,14 +106,17 @@
             /*[NEW 7.3] find list of tags in the right column*/
             const tagList = document.querySelector('.tags');
             /*[NEW 7.3] add html from allTags to tagList*/
-            //tagList.innerHTML = allTags.join(''); [NEW 7.3 object]
+            //tagList.innerHTML = allTags.join(''); [NEW 7.3 object] - usunięcie
             
             /*[NEW 7.3 object] create variable for all links HTML code*/
             let allTagsHTML = '';
             /*[NEW 7.3 object] START LOOP for each tag in allTags*/
             for(let tag in allTags){
+                //[NEW 7.3 object] generate links for the tag list
+                const tagLinkHTML = '<li><a href="#tag-' + tag + '">' + tag + ' (' + allTags[tag] + ')</a></li>'; 
+                console.log(tagLinkHTML);
                 /*[NEW 7.3 object] generate code of a link and ADD to allTagsHTML*/
-                allTagsHTML += tag + ' (' + allTags[tag] + ') ';
+                allTagsHTML += tagLinkHTML ;
                 /*[NEW 7.3 object] END LOOP for each tag in allTags*/
             }
             /*[NEW 7.3 object]  ADD HTML from allTagsHTML to tagList*/
@@ -150,6 +153,7 @@
             //console.log(activeTagLink);
         /* END LOOP: for each active tag link */
         }
+
         /* find all tag links with "href" attribute equal to the "href" constant */
         const allTagLinks = document.querySelectorAll('a[href="' + href + '"]');
         //console.log(allTagLinks);
