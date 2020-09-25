@@ -112,4 +112,26 @@ body {
 .post-tags p {
   margin: 0 10px 0 0;
 }
+
+/*Tag-size*/
+.tags a {
+  text-decoration: none;
+}
+
+.tags .tag-size-5 {
+  font-size: 50px;
+}
+
+.tags .tag-size-4 {
+  font-size: 30px;
+}
+
+.tags .tag-size-3 {
+  font-size: 20px;
+}
+
+.tags tag-size-1 {
+  font-style: italic;
+  font-size: 5px;
+}
 /*# sourceMappingURL=style.css.map */

@@ -77,7 +77,7 @@
         }
         return params;
     }
-
+    //Getting the "x" for tag-six-X
     function calculateTagClass(count, params){
         const normalizedCount = count - params.min;
         const normalizedMax = params.max - params.min;
@@ -122,13 +122,11 @@
             const tagList = document.querySelector('.tags');
             /*[NEW 7.3 object] create variable for all links HTML code*/
             let allTagsHTML = '';
-
             const tagsParams = calculateTagsParams(allTags);
-
             /*[NEW 7.3 object] START LOOP for each tag in allTags*/
             for(let tag in allTags){
                 //[NEW 7.3 object] generate links for the tag list
-                const tagLinkHTML = '<li><a href="#tag-' + tag + '" class="'+ optCloudClassPrefix +''+ calculateTagClass(allTags[tag], tagsParams) + '">' + tag + ' (' + allTags[tag] + ')</a></li>'; 
+                const tagLinkHTML = '<li><a href="#tag-' + tag + '" class="'+ optCloudClassPrefix +''+ calculateTagClass(allTags[tag], tagsParams) + '">' + tag + '</a></li>'; 
                 console.log(tagLinkHTML);
                 /*[NEW 7.3 object] generate code of a link and ADD to allTagsHTML*/
                 allTagsHTML += tagLinkHTML ;
