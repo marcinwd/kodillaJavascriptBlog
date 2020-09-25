@@ -1,15 +1,17 @@
 /* eslint-disable no-inner-declarations */
 'use strict';
 {
-    const otpArticleSelector = '.post',
-        optTitleSelector = '.post-title',
-        optTitleListSelector = '.titles',
-        optArticleTagsSelector = '.post-tags .list',
-        optArticleAuthorSelector = '.post-author',
-        optTagsListSelector = '.tags .list',
-        optCloudClassCount = '5',
-        optCloudClassPrefix = 'tag-size-',
-        optAuthorsListSelector = '.list .authors';
+    const opt = {
+        articleSelector: '.post',
+        titleSelector: '.post-title',
+        titleListSelector: '.titles',
+        articleTagsSelector: '.post-tags .list',
+        articleAuthorSelector: '.post-author',
+        tagsListSelector: '.tags.list', //nie wykorzystywane dlaczego 
+        cloudClassCount: '5',
+        cloudClassPrefix: 'tag-size-',
+        authorsListSelector: '.authors.list' //nie wykorzystywane dlaczego 
+    };
 
     //module 6. - OK
     //Switching throught articles, leftSidebar "ALL POSTS"
@@ -42,16 +44,16 @@
 
     function generateTitleLinks(customSelector = ''){// customSelector add from 7.2
         /* remove contents of titleList */
-        const titleList = document.querySelector(optTitleListSelector);
+        const titleList = document.querySelector(opt.titleListSelector);
         titleList.innerHTML = '';
         /* for each article */
-        const articles = document.querySelectorAll(otpArticleSelector + customSelector);// customSelector add from 7.2
+        const articles = document.querySelectorAll(opt.articleSelector + customSelector);// customSelector add from 7.2
         let html = '';
         for(let article of articles){
             /* get the article id */
             const articleId = article.getAttribute('id');
             /* find the title element *//* get the title from the title element */
-            const articleTitle = article.querySelector(optTitleSelector).innerHTML;
+            const articleTitle = article.querySelector(opt.titleSelector).innerHTML;
             /* create HTML of the link */
             const linkHTML = '<li><a href="#'+ articleId +'"><span>' + articleTitle + '</span></a></li>';
             /* create list of html links*/
@@ -83,7 +85,7 @@
         const normalizedCount = count - params.min;
         const normalizedMax = params.max - params.min;
         const percentage = normalizedCount / normalizedMax;
-        const classNumber = Math.floor( percentage * (optCloudClassCount - 1) + 1 );
+        const classNumber = Math.floor( percentage * (opt.cloudClassCount - 1) + 1 );
         return classNumber;
     }
 
@@ -93,11 +95,11 @@
         /*create a new variable allTags with an empty object*/
         let allTags = {};
         /*find all articles */
-        const allArticles = document.querySelectorAll(otpArticleSelector);
+        const allArticles = document.querySelectorAll(opt.articleSelector);
         /* START LOOP: for every article: */
         for(let article of allArticles){
         /* find tags wrapper */
-            const tagsWrapper = article.querySelector(optArticleTagsSelector);
+            const tagsWrapper = article.querySelector(opt.articleTagsSelector);
             /* make html variable with empty string */
             let html = '';
             /* get tags from data-tags attribute */
@@ -120,14 +122,14 @@
             /* END LOOP: for each tag */
             }
             /*find list of tags in the right column*/
-            const tagList = document.querySelector('.tags');
+            const tagList = document.querySelector(opt.tagsListSelector);
             /*[NEW 7.3 object] create variable for all links HTML code*/
             let allTagsHTML = '';
             const tagsParams = calculateTagsParams(allTags);
             /*[NEW 7.3 object] START LOOP for each tag in allTags*/
             for(let tag in allTags){
                 //[NEW 7.3 object] generate links for the tag list
-                const tagLinkHTML = '<li><a href="#tag-' + tag + '" class="'+ optCloudClassPrefix +''+ calculateTagClass(allTags[tag], tagsParams) + '">' + tag + '</a></li>'; 
+                const tagLinkHTML = '<li><a href="#tag-' + tag + '" class="'+ opt.cloudClassPrefix +''+ calculateTagClass(allTags[tag], tagsParams) + '">' + tag + '</a></li>'; 
                 //console.log(tagLinkHTML);
                 /*[NEW 7.3 object] generate code of a link and ADD to allTagsHTML*/
                 allTagsHTML += tagLinkHTML ;
@@ -197,11 +199,11 @@
         //[JA]create a new empty object allAuthors
         let allAuthors = {};
         /* find all articles */
-        const allArticles = document.querySelectorAll(otpArticleSelector);
+        const allArticles = document.querySelectorAll(opt.articleSelector);
         /* START LOOP: for every article: */
         for(let article of allArticles){
         /* find author wrapper */
-            const authorWrapper = article.querySelector(optArticleAuthorSelector);
+            const authorWrapper = article.querySelector(opt.articleAuthorSelector);
             //console.log(authorWrapper);
             /* make html variable with empty string */
             let html = '';
@@ -222,7 +224,7 @@
                 allAuthors[author]++;
             }
             //[JA] find authors
-            const authorsList = document.querySelector('.authors');
+            const authorsList = document.querySelector(opt.authorsListSelector);
             console.log(authorsList);
             //[JA] variable for all authors links HTML code
             let allAuthorsHTML = '';
