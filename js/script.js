@@ -8,7 +8,8 @@
         optArticleAuthorSelector = '.post-author',
         optTagsListSelector = '.tags .list',
         optCloudClassCount = '5',
-        optCloudClassPrefix = 'tag-size-';
+        optCloudClassPrefix = 'tag-size-',
+        optAuthorsListSelector = '.list .authors';
 
     //module 6. - OK
     //Switching throught articles, leftSidebar "ALL POSTS"
@@ -127,7 +128,7 @@
             for(let tag in allTags){
                 //[NEW 7.3 object] generate links for the tag list
                 const tagLinkHTML = '<li><a href="#tag-' + tag + '" class="'+ optCloudClassPrefix +''+ calculateTagClass(allTags[tag], tagsParams) + '">' + tag + '</a></li>'; 
-                console.log(tagLinkHTML);
+                //console.log(tagLinkHTML);
                 /*[NEW 7.3 object] generate code of a link and ADD to allTagsHTML*/
                 allTagsHTML += tagLinkHTML ;
                 /*[NEW 7.3 object] END LOOP for each tag in allTags*/
@@ -165,7 +166,6 @@
             //console.log(activeTagLink);
         /* END LOOP: for each active tag link */
         }
-
         /* find all tag links with "href" attribute equal to the "href" constant */
         const allTagLinks = document.querySelectorAll('a[href="' + href + '"]');
         //console.log(allTagLinks);
@@ -194,9 +194,10 @@
     addClickListenersToTags();
 
     function generateAuthors(){
+        //[JA]create a new empty object allAuthors
+        let allAuthors = {};
         /* find all articles */
         const allArticles = document.querySelectorAll(otpArticleSelector);
-        //console.log(allArticles);
         /* START LOOP: for every article: */
         for(let article of allArticles){
         /* find author wrapper */
@@ -206,14 +207,35 @@
             let html = '';
             /* get authors from data-author attribute */
             const author = article.getAttribute('data-author');
-            //console.log(author);
+            console.log(author);
             /*generate HTML of the link*/
             const authorLinkHTML = '<a href="#author-' + author + '"><span>by ' + author + '</span></a>';
             /*add genarated code to html variable*/
-            html = html + authorLinkHTML;
+            html +=  authorLinkHTML;
             //console.log(html);
             /* insert HTML of all the links into the tags wrapper */
             authorWrapper.innerHTML = html;
+
+            if(!allAuthors[author]){
+                allAuthors[author] = 1;
+            } else {
+                allAuthors[author]++;
+            }
+            //[JA] find authors
+            const authorsList = document.querySelector('.authors');
+            console.log(authorsList);
+            //[JA] variable for all authors links HTML code
+            let allAuthorsHTML = '';
+            const authorsParams = calculateTagsParams(allAuthors);
+            console.log(authorsParams);
+            //console.log(allAuthorsHTML);
+            for(let author in allAuthors){
+            //generate links for author list
+                const authorLinkHTML = '<li><a href="#author-' + author + '">' + author + ' (' + allAuthors[author] + ')</a></li>'; 
+                console.log(authorLinkHTML);
+                allAuthorsHTML += authorLinkHTML;
+            }
+            authorsList.innerHTML = allAuthorsHTML;
         /* END LOOP: for every article: */
         }
     }
