@@ -6,7 +6,9 @@
         optTitleListSelector = '.titles',
         optArticleTagsSelector = '.post-tags .list',
         optArticleAuthorSelector = '.post-author',
-        optTagsListSelector = '.tags .list';
+        optTagsListSelector = '.tags .list',
+        optCloudClassCount = '5',
+        optCloudClassPrefix = 'tag-size-';
 
     //module 6. - OK
     //Switching throught articles, leftSidebar "ALL POSTS"
@@ -64,14 +66,32 @@
     }
     generateTitleLinks();
 
+    //module 7.3
+    //Finding the min and max
+    function calculateTagsParams(tags){
+        //defining min and max of our parameters for tags
+        const params = {min: '99999', max: '0'};
+        for(let tag in tags){
+            params.max = Math.max(tags[tag], params.max);
+            params.min = Math.min(tags[tag], params.min);
+        }
+        return params;
+    }
+
+    function calculateTagClass(count, params){
+        const normalizedCount = count - params.min;
+        const normalizedMax = params.max - params.min;
+        const percentage = normalizedCount / normalizedMax;
+        const classNumber = Math.floor( percentage * (optCloudClassCount - 1) + 1 );
+        return classNumber;
+    }
+
     //module 7.2; module 7.3 when [NEW 7.3]
     //Creats tag links at the bottom of each article & taglist on the right [NEW 7.3]
     function generateTags(){
-        /*[NEW 7.3] create a new variable allTags with an empty array
-        let allTags = [];*/
-        /*[NEW 7.3 object] create a new variable allTags with an empty object*/
+        /*create a new variable allTags with an empty object*/
         let allTags = {};
-        /* find all articles */
+        /*find all articles */
         const allArticles = document.querySelectorAll(otpArticleSelector);
         /* START LOOP: for every article: */
         for(let article of allArticles){
@@ -89,31 +109,26 @@
                 const tagLinkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
                 /* add generated code to html variable */
                 html += ' ' + tagLinkHTML;
-                /*[NEW 7.3] check if this link is NOT already in allTags
-                if(allTags.indexOf(tagLinkHTML) == -1){
-                    /*[NEW 7.3] generate code to allTags array
-                    allTags.push(tagLinkHTML);
-                }*/
-                /*[NEW 7.3 object] check if this link is not already in allTags*/
+                /* check if this link is not already in allTags*/
                 if(!allTags[tag]){
-                    /*[NEW 7.3 object] add tag to allTags object*/
+                    /* add tag to allTags object*/
                     allTags[tag] = 1;
                 } else {
                     allTags[tag]++;
                 }
             /* END LOOP: for each tag */
             }
-            /*[NEW 7.3] find list of tags in the right column*/
+            /*find list of tags in the right column*/
             const tagList = document.querySelector('.tags');
-            /*[NEW 7.3] add html from allTags to tagList*/
-            //tagList.innerHTML = allTags.join(''); [NEW 7.3 object] - usunięcie
-            
             /*[NEW 7.3 object] create variable for all links HTML code*/
             let allTagsHTML = '';
+
+            const tagsParams = calculateTagsParams(allTags);
+
             /*[NEW 7.3 object] START LOOP for each tag in allTags*/
             for(let tag in allTags){
                 //[NEW 7.3 object] generate links for the tag list
-                const tagLinkHTML = '<li><a href="#tag-' + tag + '">' + tag + ' (' + allTags[tag] + ')</a></li>'; 
+                const tagLinkHTML = '<li><a href="#tag-' + tag + '" class="'+ optCloudClassPrefix +''+ calculateTagClass(allTags[tag], tagsParams) + '">' + tag + ' (' + allTags[tag] + ')</a></li>'; 
                 console.log(tagLinkHTML);
                 /*[NEW 7.3 object] generate code of a link and ADD to allTagsHTML*/
                 allTagsHTML += tagLinkHTML ;
@@ -121,7 +136,6 @@
             }
             /*[NEW 7.3 object]  ADD HTML from allTagsHTML to tagList*/
             tagList.innerHTML = allTagsHTML;
-            console.log(allTags);
 
             /* insert HTML of all the links into the tags wrapper */
             tagsWrapper.innerHTML = html;
