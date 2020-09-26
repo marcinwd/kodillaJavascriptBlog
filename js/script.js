@@ -1,16 +1,25 @@
 /* eslint-disable no-inner-declarations */
 'use strict';
 {
+
+    const templates = {
+        articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),
+        tagLink: Handlebars.compile(document.querySelector('#template-tag-link').innerHTML),
+        authorLink: Handlebars.compile(document.querySelector('#template-author-link').innerHTML),
+
+        tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML)
+    };
+
     const opt = {
         articleSelector: '.post',
         titleSelector: '.post-title',
         titleListSelector: '.titles',
         articleTagsSelector: '.post-tags .list',
         articleAuthorSelector: '.post-author',
-        tagsListSelector: '.tags.list', //nie wykorzystywane dlaczego 
+        tagsListSelector: '.tags.list',  
         cloudClassCount: '5',
         cloudClassPrefix: 'tag-size-',
-        authorsListSelector: '.authors.list' //nie wykorzystywane dlaczego 
+        authorsListSelector: '.authors.list' 
     };
 
     //module 6. - OK
@@ -39,7 +48,6 @@
     };
 
     //module 6.4
-    // eslint-disable-next-line no-inner-declarations
     //Creats links to the article which are on the leftSidebar "ALL POSTS"
 
     function generateTitleLinks(customSelector = ''){// customSelector add from 7.2
@@ -54,8 +62,10 @@
             const articleId = article.getAttribute('id');
             /* find the title element *//* get the title from the title element */
             const articleTitle = article.querySelector(opt.titleSelector).innerHTML;
-            /* create HTML of the link */
-            const linkHTML = '<li><a href="#'+ articleId +'"><span>' + articleTitle + '</span></a></li>';
+            /*[NEW 7.4 handlebars] create HTML of the link  */
+            const linkHTMLData = {id: articleId, title: articleTitle};
+            const linkHTML = templates.articleLink(linkHTMLData);
+            //const linkHTML = '<li><a href="#'+ articleId +'"><span>' + articleTitle + '</span></a></li>';
             /* create list of html links*/
             html += linkHTML;
         }
@@ -108,8 +118,10 @@
             const articleTagsArray = articleTags.split(' ');
             /* START LOOP: for each tag */
             for(let tag of articleTagsArray){
-                /* generate HTML of the link */
-                const tagLinkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
+                /*[NEW 7.5 Handlebars] generate HTML of the link */
+                const linkHTMLData = {id: tag, tag: tag};
+                const tagLinkHTML = templates.tagLink(linkHTMLData);
+                //const tagLinkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
                 /* add generated code to html variable */
                 html += ' ' + tagLinkHTML;
                 /* check if this link is not already in allTags*/
@@ -210,8 +222,10 @@
             /* get authors from data-author attribute */
             const author = article.getAttribute('data-author');
             console.log(author);
-            /*generate HTML of the link*/
-            const authorLinkHTML = '<a href="#author-' + author + '"><span>by ' + author + '</span></a>';
+            /*[NEW 7.5 Handlebars] generate HTML of the link*/
+            const linkHTMLData = {id: author, author: author};
+            const authorLinkHTML = templates.authorLink(linkHTMLData);
+            //const authorLinkHTML = '<a href="#author-' + author + '"><span>by ' + author + '</span></a>';
             /*add genarated code to html variable*/
             html +=  authorLinkHTML;
             //console.log(html);
@@ -225,16 +239,11 @@
             }
             //[JA] find authors
             const authorsList = document.querySelector(opt.authorsListSelector);
-            console.log(authorsList);
             //[JA] variable for all authors links HTML code
             let allAuthorsHTML = '';
-            const authorsParams = calculateTagsParams(allAuthors);
-            console.log(authorsParams);
-            //console.log(allAuthorsHTML);
             for(let author in allAuthors){
             //generate links for author list
                 const authorLinkHTML = '<li><a href="#author-' + author + '">' + author + ' (' + allAuthors[author] + ')</a></li>'; 
-                console.log(authorLinkHTML);
                 allAuthorsHTML += authorLinkHTML;
             }
             authorsList.innerHTML = allAuthorsHTML;
