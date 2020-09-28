@@ -7,7 +7,8 @@
         tagLink: Handlebars.compile(document.querySelector('#template-tag-link').innerHTML),
         authorLink: Handlebars.compile(document.querySelector('#template-author-link').innerHTML),
 
-        tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML)
+        tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML),
+        authorListLink : Handlebars.compile(document.querySelector('#template-author-list-link').innerHTML),
     };
 
     const opt = {
@@ -139,7 +140,6 @@
             const allTagsData = {
                 tags: []
             };
-            console.log(allTagsData);
             //let allTagsHTML = '';
             const tagsParams = calculateTagsParams(allTags);
             /*[NEW 7.3 object] START LOOP for each tag in allTags*/
@@ -153,7 +153,7 @@
                     count: allTags[tag],
                     className: calculateTagClass(allTags[tag], tagsParams),
                 });
-                console.log(allTagsData.tags);
+                //console.log(allTagsData.tags);
                 //allTagsHTML += tagLinkHTML ;
                 /*[NEW 7.3 object] END LOOP for each tag in allTags*/
             }
@@ -250,14 +250,27 @@
             }
             //[JA] find authors
             const authorsList = document.querySelector(opt.authorsListSelector);
-            //[JA] variable for all authors links HTML code
-            let allAuthorsHTML = '';
+            //[JA 7.5 handlebars] const object for all authors links HTML code
+            const allAuthorsData = {
+                authors: []
+            };
+            console.log(allAuthorsData);
+            console.log(allAuthorsData.author);
+            //let allAuthorsHTML = '';
             for(let author in allAuthors){
-            //generate links for author list
-                const authorLinkHTML = '<li><a href="#author-' + author + '">' + author + ' (' + allAuthors[author] + ')</a></li>'; 
-                allAuthorsHTML += authorLinkHTML;
+            //[JA 7.5 handlebars] generate links for author list
+                allAuthorsData.authors.push({
+                    author: author,
+                    count: allAuthors[author],
+                });
+                console.log(allAuthorsData.authors);
+                console.log(allAuthors[author]);
+                //const authorLinkHTML = '<li><a href="#author-' + author + '">' + author + ' (' + allAuthors[author] + ')</a></li>'; 
+                //allAuthorsHTML += authorLinkHTML;
             }
-            authorsList.innerHTML = allAuthorsHTML;
+            //[JA 7.5 handlebars] ADD HTML via template
+            authorsList.innerHTML = templates.authorListLink(allAuthorsData);
+            //authorsList.innerHTML = allAuthorsHTML;
         /* END LOOP: for every article: */
         }
     }
@@ -285,7 +298,7 @@
         //console.log(allAuthorLinks);
         for(let authorLink of allAuthorLinks){
             authorLink.classList.add('active');
-            console.log(authorLink);
+            //console.log(authorLink);
         }
         generateTitleLinks('[data-author="' + author + '"]');
     }
