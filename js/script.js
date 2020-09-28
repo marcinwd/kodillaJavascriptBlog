@@ -135,20 +135,32 @@
             }
             /*find list of tags in the right column*/
             const tagList = document.querySelector(opt.tagsListSelector);
-            /*[NEW 7.3 object] create variable for all links HTML code*/
-            let allTagsHTML = '';
+            /*[NEW 7.5 handlebars] create empty object with tag as a key for all links HTML code*/
+            const allTagsData = {
+                tags: []
+            };
+            console.log(allTagsData);
+            //let allTagsHTML = '';
             const tagsParams = calculateTagsParams(allTags);
             /*[NEW 7.3 object] START LOOP for each tag in allTags*/
             for(let tag in allTags){
                 //[NEW 7.3 object] generate links for the tag list
-                const tagLinkHTML = '<li><a href="#tag-' + tag + '" class="'+ opt.cloudClassPrefix +''+ calculateTagClass(allTags[tag], tagsParams) + '">' + tag + '</a></li>'; 
+                //const tagLinkHTML = '<li><a href="#tag-' + tag + '" class="'+ opt.cloudClassPrefix +''+ calculateTagClass(allTags[tag], tagsParams) + '">' + tag + '</a></li>'; 
                 //console.log(tagLinkHTML);
-                /*[NEW 7.3 object] generate code of a link and ADD to allTagsHTML*/
-                allTagsHTML += tagLinkHTML ;
+                /*[NEW 7.5 handlebars] ADD to object allTagsData ln139*/
+                allTagsData.tags.push({
+                    tag: tag,
+                    count: allTags[tag],
+                    className: calculateTagClass(allTags[tag], tagsParams),
+                });
+                console.log(allTagsData.tags);
+                //allTagsHTML += tagLinkHTML ;
                 /*[NEW 7.3 object] END LOOP for each tag in allTags*/
             }
-            /*[NEW 7.3 object]  ADD HTML from allTagsHTML to tagList*/
-            tagList.innerHTML = allTagsHTML;
+            /*[NEW 7.5 handlebars]  ADD HTML to tagList*/
+            tagList.innerHTML = templates.tagCloudLink(allTagsData);
+            
+            //tagList.innerHTML = allTagsHTML;
 
             /* insert HTML of all the links into the tags wrapper */
             tagsWrapper.innerHTML = html;
@@ -221,7 +233,6 @@
             let html = '';
             /* get authors from data-author attribute */
             const author = article.getAttribute('data-author');
-            console.log(author);
             /*[NEW 7.5 Handlebars] generate HTML of the link*/
             const linkHTMLData = {id: author, author: author};
             const authorLinkHTML = templates.authorLink(linkHTMLData);
